@@ -43,4 +43,4 @@
 - Apresentação "Conclusão"
 
 # Status
-## Planejamento! 
+## Em Planejamento! 
