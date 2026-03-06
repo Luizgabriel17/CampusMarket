@@ -43,4 +43,4 @@
 - Apresentação "Conclusão"
 
 # Status
-## Em Planejamento! 
+## Modelagem do Banco de Dados! 
