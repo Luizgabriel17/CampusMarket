@@ -20,7 +20,6 @@
 ## Além disso, pode servir como ferramenta educativa prática de gestão de negócios.
  
 # Usuários
-- Administradores
 - Vendedores
 - Clientes
 
