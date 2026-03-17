@@ -1,17 +1,19 @@
 var createError = require('http-errors');
 var express = require('express');
+var app = express();
+
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const session = require("express-session"); // ✅ IMPORTAR UMA VEZ SÓ
+const session = require("express-session");
 
 // ROTAS
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const dashboardRouter = require("./routes/dashboard");
 const authRoutes = require("./routes/auth");
-
-var app = express();
+const carrinhoRouter = require("./routes/carrinho");
+const clienteRouter = require("./routes/cliente");
 
 // VIEW ENGINE
 app.set('views', path.join(__dirname, 'views'));
@@ -24,18 +26,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// 🔐 SESSÃO (ANTES DAS ROTAS)
+// 🔐 SESSÃO
 app.use(session({
   secret: "segredo_tcc",
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { secure: false } // importante para localhost
 }));
 
-// ROTAS
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use("/", authRoutes);
+// 🔑 ROTAS PRINCIPAIS
+app.use("/", authRoutes);          // login primeiro
+app.use("/cliente", clienteRouter);
 app.use("/dashboard", dashboardRouter);
+app.use("/carrinho", carrinhoRouter);
+app.use("/users", usersRouter);
+app.use("/", indexRouter);         // sempre por último
 
 // 404
 app.use(function(req, res, next) {
