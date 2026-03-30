@@ -1,59 +1,42 @@
-var createError = require('http-errors');
-var express = require('express');
-var app = express();
+const express = require("express");
+const app = express();
 
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const path = require("path");
 const session = require("express-session");
+const logger = require("morgan");
+const cookieParser = require("cookie-parser");
 
 // ROTAS
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-const dashboardRouter = require("./routes/dashboard");
 const authRoutes = require("./routes/auth");
-const carrinhoRouter = require("./routes/carrinho");
-const clienteRouter = require("./routes/cliente");
+const registerRoutes = require("./routes/register");
+const clienteRoutes = require("./routes/cliente");
+const dashboardRoutes = require("./routes/dashboard");
 
-// VIEW ENGINE
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// CONFIG
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 // MIDDLEWARES
-app.use(logger('dev'));
-app.use(express.json());
+app.use(logger("dev"));
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static("public"));
 
-// 🔐 SESSÃO
+// SESSÃO
 app.use(session({
-  secret: "segredo_tcc",
+  secret: "tcc_secret",
   resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false } // importante para localhost
+  saveUninitialized: false
 }));
 
-// 🔑 ROTAS PRINCIPAIS
-app.use("/", authRoutes);          // login primeiro
-app.use("/cliente", clienteRouter);
-app.use("/dashboard", dashboardRouter);
-app.use("/carrinho", carrinhoRouter);
-app.use("/users", usersRouter);
-app.use("/", indexRouter);         // sempre por último
+// ROTAS
+app.use("/", authRoutes);
+app.use("/register", registerRoutes);
+app.use("/cliente", clienteRoutes);
+app.use("/dashboard", dashboardRoutes);
 
-// 404
-app.use(function(req, res, next) {
-  next(createError(404));
+// START
+app.listen(3000, () => {
+  console.log("Servidor rodando em http://localhost:3000");
 });
-
-// ERRO
-app.use(function(err, req, res, next) {
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;

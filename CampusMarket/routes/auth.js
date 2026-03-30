@@ -2,50 +2,36 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/database");
 
-// 📄 TELA DE LOGIN
+// TELA
 router.get("/login", (req, res) => {
   res.render("login");
 });
 
-// 🔐 PROCESSA LOGIN
+// LOGIN
 router.post("/login", (req, res) => {
-  const { email, senha, tipo } = req.body;
+  const { email, senha } = req.body;
 
-  let tabela = tipo === "cliente" ? "cliente" : "vendedor";
+  const sqlCliente = "SELECT * FROM cliente WHERE email = ? AND senha = ?";
+  const sqlVendedor = "SELECT * FROM vendedor WHERE email = ? AND senha = ?";
 
-  const sql = `SELECT * FROM ${tabela} WHERE email = ? AND senha = ?`;
-
-  db.query(sql, [email, senha], (err, results) => {
-    if (err) {
-      console.log(err);
-      return res.send("Erro no login");
+  db.query(sqlCliente, [email, senha], (err, resultCliente) => {
+    if (resultCliente.length > 0) {
+      req.session.user = { tipo: "cliente", ...resultCliente[0] };
+      return res.redirect("/cliente");
     }
 
-    if (results.length === 0) {
-      return res.send("Usuário não encontrado");
-    }
-
-    const user = results[0];
-
-    // ✅ SALVA NA SESSÃO
-    req.session.user = {
-      id: user.id,
-      nome: user.nome,
-      tipo: tipo
-    };
-
-    // ✅ GARANTE QUE SALVOU ANTES DE REDIRECIONAR
-    req.session.save(() => {
-      if (tipo === "cliente") {
-        return res.redirect("/cliente");
-      } else {
+    db.query(sqlVendedor, [email, senha], (err, resultVendedor) => {
+      if (resultVendedor.length > 0) {
+        req.session.user = { tipo: "vendedor", ...resultVendedor[0] };
         return res.redirect("/dashboard");
       }
+
+      res.send("Usuário não encontrado");
     });
   });
 });
 
-// 🚪 LOGOUT
+// LOGOUT
 router.get("/logout", (req, res) => {
   req.session.destroy(() => {
     res.redirect("/login");
