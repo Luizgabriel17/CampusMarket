@@ -14,6 +14,7 @@ const dashboardRouter = require("./routes/dashboard");
 const authRoutes = require("./routes/auth");
 const carrinhoRouter = require("./routes/carrinho");
 const clienteRouter = require("./routes/cliente");
+const pedidoRouter = require("./routes/pedido");
 
 // VIEW ENGINE
 app.set('views', path.join(__dirname, 'views'));
@@ -39,6 +40,7 @@ app.use("/", authRoutes);          // login primeiro
 app.use("/cliente", clienteRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/carrinho", carrinhoRouter);
+app.use("/pedido", pedidoRouter);
 app.use("/users", usersRouter);
 app.use("/", indexRouter);         // sempre por último
 

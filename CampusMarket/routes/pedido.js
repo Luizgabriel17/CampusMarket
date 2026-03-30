@@ -4,48 +4,53 @@ const db = require("../database/database");
 
 // FINALIZAR PEDIDO
 router.post("/finalizar", (req, res) => {
+  if (!req.session.user || req.session.user.tipo !== "cliente") {
+    return res.status(401).send("Faça login como cliente para finalizar o pedido");
+  }
 
   const carrinho = req.session.carrinho;
-  const cliente_id = req.session.user.id;
+  const clienteId = req.session.user.id;
 
   if (!carrinho || carrinho.length === 0) {
-    return res.send("Carrinho vazio");
+    return res.status(400).send("Carrinho vazio");
   }
 
   let total = 0;
-  let vendedor_id = carrinho[0].vendedor_id;
+  const vendedorId = carrinho[0].vendedor_id;
 
-  carrinho.forEach(item => {
-    total += item.preco;
-  });
+  for (const item of carrinho) {
+    total += Number(item.preco);
+  }
 
   const sqlPedido = `
     INSERT INTO pedidos (cliente_id, vendedor_id, valor_total, status)
-    VALUES (?, ?, ?, 'pendente')
+    VALUES (?, ?, ?, 'PENDENTE')
   `;
 
-  db.query(sqlPedido, [cliente_id, vendedor_id, total], (err, result) => {
+  db.query(sqlPedido, [clienteId, vendedorId, total], (pedidoErr, result) => {
+    if (pedidoErr) {
+      console.log(pedidoErr);
+      return res.status(500).send("Erro ao criar pedido");
+    }
 
-    if (err) return res.send("Erro");
+    const pedidoId = result.insertId;
+    const itens = carrinho.map((item) => [pedidoId, item.id, 1, item.preco]);
 
-    const pedido_id = result.insertId;
+    const sqlItens = `
+      INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, preco_unitario)
+      VALUES ?
+    `;
 
-    carrinho.forEach(item => {
+    db.query(sqlItens, [itens], (itensErr) => {
+      if (itensErr) {
+        console.log(itensErr);
+        return res.status(500).send("Erro ao salvar itens do pedido");
+      }
 
-      const sqlItem = `
-        INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, preco_unitario)
-        VALUES (?, ?, 1, ?)
-      `;
-
-      db.query(sqlItem, [pedido_id, item.id, item.preco]);
-
+      req.session.carrinho = [];
+      return res.redirect("/cliente");
     });
-
-    req.session.carrinho = [];
-
-    res.send("Pedido realizado com sucesso!");
   });
-
 });
 
 module.exports = router;
