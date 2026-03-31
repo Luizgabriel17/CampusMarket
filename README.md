@@ -35,11 +35,11 @@
 # Cronograma
 - Planejamento "Estrutura e ideias definidas"
 - Modelagem do Banco de Dados "Desenvolvimento do Banco de Dados"
-- Backend "API + CRUD prontos"
-- Frontend "Interface pronta"
+- Backend "API + CRUD em desenvolvimento"
+- Frontend "Desenvolvimento FrontEnd"
 - Diferenciais "Sistema avançado"
 - Deploy + Teste "Sistema em modo Beta"
 - Apresentação "Conclusão"
 
 # Status
-## Modelagem do Banco de Dados! 
+## Backend "API + CRUD em desenvolvimento"
