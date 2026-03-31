@@ -27,9 +27,13 @@ app.use(express.static("public"));
 app.use(session({
   secret: "tcc_secret",
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    secure: false,      // TRUE só se usar HTTPS
+    httpOnly: true,     // protege contra ataques
+    maxAge: 1000 * 60 * 60 // 1 hora
+  }
 }));
-
 // ROTAS
 app.use("/", authRoutes);
 app.use("/register", registerRoutes);
