@@ -9,38 +9,69 @@
 
 <nav class="navbar navbar-dark bg-dark">
   <div class="container">
-    <span class="navbar-brand">Painel do Vendedor</span>
-    <a href="/logout" class="btn btn-light">Sair</a>
+    <span class="navbar-brand">CampusMarket - Vendedor</span>
+    <div>
+      <span class="text-white me-3">
+        Olá, <%= typeof user !== 'undefined' && user ? user.nome : "Vendedor" %>
+      </span>
+      <a href="/logout" class="btn btn-light">Sair</a>
+    </div>
   </div>
 </nav>
 
 <div class="container mt-4">
-  <h3>Bem-vindo, vendedor! 🧑‍💼</h3>
 
-  <div class="row mt-4">
+  <h3>Painel do Vendedor 🧑‍💼</h3>
 
-    <div class="col-md-4">
-      <div class="card p-3 shadow">
-        <h5>📦 Produtos</h5>
-        <p>Gerencie seus produtos</p>
-      </div>
-    </div>
+  <!-- BOTÃO NOVO PRODUTO -->
+  <a href="/dashboard/produtos/novo" class="btn btn-success mb-3">
+    ➕ Novo Produto
+  </a>
 
-    <div class="col-md-4">
-      <div class="card p-3 shadow">
-        <h5>🛒 Pedidos</h5>
-        <p>Veja os pedidos recebidos</p>
-      </div>
-    </div>
+  <!-- TABELA DE PRODUTOS -->
+  <table class="table table-bordered">
+    <thead class="table-dark">
+      <tr>
+        <th>Nome</th>
+        <th>Preço</th>
+        <th>Estoque</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
 
-    <div class="col-md-4">
-      <div class="card p-3 shadow">
-        <h5>📊 Relatórios</h5>
-        <p>Veja seu desempenho</p>
-      </div>
-    </div>
+    <tbody>
+      <% if (produtos && produtos.length > 0) { %>
+        <% produtos.forEach(p => { %>
+          <tr>
+            <td><%= p.nome %></td>
+            <td>R$ <%= p.preco %></td>
+            <td><%= p.estoque %></td>
+            <td>
 
-  </div>
+              <!-- EDITAR -->
+              <a href="/dashboard/produtos/editar/<%= p.id %>" class="btn btn-warning btn-sm">
+                ✏️ Editar
+              </a>
+
+              <!-- DELETAR -->
+              <form action="/dashboard/produtos/deletar/<%= p.id %>" method="POST" style="display:inline;">
+                <button class="btn btn-danger btn-sm">
+                  🗑️ Excluir
+                </button>
+              </form>
+
+            </td>
+          </tr>
+        <% }) %>
+      <% } else { %>
+        <tr>
+          <td colspan="4" class="text-center">Nenhum produto cadastrado</td>
+        </tr>
+      <% } %>
+    </tbody>
+
+  </table>
+
 </div>
 
 </body>

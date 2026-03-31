@@ -2,16 +2,12 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/database");
 
-// =========================
-// 🔐 TELA DE LOGIN
-// =========================
+// LOGIN PAGE
 router.get("/login", (req, res) => {
   res.render("login");
 });
 
-// =========================
-// 🔐 PROCESSO DE LOGIN
-// =========================
+// LOGIN
 router.post("/login", (req, res) => {
   const { email, senha } = req.body;
 
@@ -22,12 +18,8 @@ router.post("/login", (req, res) => {
   const sqlCliente = "SELECT * FROM cliente WHERE email = ? AND senha = ?";
   const sqlVendedor = "SELECT * FROM vendedor WHERE email = ? AND senha = ?";
 
-  // 🔹 Verifica CLIENTE
   db.query(sqlCliente, [email, senha], (err, resultCliente) => {
-    if (err) {
-      console.error("Erro ao buscar cliente:", err);
-      return res.status(500).send("Erro no servidor");
-    }
+    if (err) return res.status(500).send("Erro no servidor");
 
     if (resultCliente.length > 0) {
       const cliente = resultCliente[0];
@@ -38,16 +30,14 @@ router.post("/login", (req, res) => {
         email: cliente.email,
         tipo: "cliente"
       };
-      console.log("LOGIN - sessão criada:", req.session.user);
-      return res.redirect("/cliente");
+
+      return req.session.save(() => {
+        res.redirect("/cliente");
+      });
     }
 
-    // 🔹 Se não for cliente, verifica VENDEDOR
     db.query(sqlVendedor, [email, senha], (err, resultVendedor) => {
-      if (err) {
-        console.error("Erro ao buscar vendedor:", err);
-        return res.status(500).send("Erro no servidor");
-      }
+      if (err) return res.status(500).send("Erro no servidor");
 
       if (resultVendedor.length > 0) {
         const vendedor = resultVendedor[0];
@@ -59,25 +49,19 @@ router.post("/login", (req, res) => {
           tipo: "vendedor"
         };
 
-        return res.redirect("/dashboard");
+        return req.session.save(() => {
+          res.redirect("/dashboard");
+        });
       }
 
-      // ❌ Nenhum encontrado
-      return res.send("Email ou senha inválidos");
+      res.send("Email ou senha inválidos");
     });
   });
 });
 
-// =========================
-// 🔓 LOGOUT
-// =========================
+// LOGOUT
 router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error("Erro ao destruir sessão:", err);
-      return res.redirect("/cliente");
-    }
-
+  req.session.destroy(() => {
     res.redirect("/login");
   });
 });

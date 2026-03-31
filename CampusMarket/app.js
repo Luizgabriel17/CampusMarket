@@ -11,6 +11,9 @@ const authRoutes = require("./routes/auth");
 const registerRoutes = require("./routes/register");
 const clienteRoutes = require("./routes/cliente");
 const dashboardRoutes = require("./routes/dashboard");
+const pedidosRoutes = require("./routes/pedidos");
+const produtosRoutes = require("./routes/produtos");
+const avaliacoesRoutes = require("./routes/avaliacoes");
 
 // CONFIG
 app.set("view engine", "ejs");
@@ -29,16 +32,26 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,      // TRUE só se usar HTTPS
-    httpOnly: true,     // protege contra ataques
-    maxAge: 1000 * 60 * 60 // 1 hora
+    secure: false,
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60
   }
 }));
+
+// DISPONIBILIZA USER GLOBALMENTE NAS VIEWS
+app.use((req, res, next) => {
+  res.locals.user = req.session.user || null;
+  next();
+});
+
 // ROTAS
 app.use("/", authRoutes);
 app.use("/register", registerRoutes);
 app.use("/cliente", clienteRoutes);
 app.use("/dashboard", dashboardRoutes);
+app.use("/pedidos", pedidosRoutes);
+app.use("/produtos", produtosRoutes);
+app.use("/avaliacoes", avaliacoesRoutes);
 
 // START
 app.listen(3000, () => {
