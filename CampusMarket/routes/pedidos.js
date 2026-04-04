@@ -2,92 +2,94 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/database");
 
-// 🔹 Criar pedido com itens
-router.post("/", (req, res) => {
-  const { cliente_id, vendedor_id, itens } = req.body;
+// Middleware cliente
+function authCliente(req, res, next) {
+  if (!req.session.user || req.session.user.tipo !== "cliente") {
+    return res.redirect("/login");
+  }
+  next();
+}
 
-  // calcular total
-  let total = 0;
-  itens.forEach(item => {
-    total += item.preco * item.quantidade;
-  });
+// LISTAR PEDIDOS DO CLIENTE
+router.get("/", authCliente, (req, res) => {
+  const clienteId = req.session.user.id;
 
-  const sqlPedido = `
-    INSERT INTO pedidos (cliente_id, vendedor_id, valor_total)
-    VALUES (?, ?, ?)
-  `;
-
-  db.query(sqlPedido, [cliente_id, vendedor_id, total], (err, result) => {
-    if (err) return res.status(500).send(err);
-
-    const pedidoId = result.insertId;
-
-    // inserir itens
-    const sqlItem = `
-      INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, preco_unitario)
-      VALUES ?
-    `;
-
-    const valores = itens.map(item => [
-      pedidoId,
-      item.produto_id,
-      item.quantidade,
-      item.preco
-    ]);
-
-    db.query(sqlItem, [valores], (err) => {
-      if (err) return res.status(500).send(err);
-
-      res.json({
-        message: "Pedido criado com sucesso",
-        pedidoId
-      });
-    });
-  });
-});
-
-// 🔹 Listar pedidos (com cliente e vendedor)
-router.get("/", (req, res) => {
   const sql = `
-    SELECT p.*, c.nome AS cliente_nome, v.nome AS vendedor_nome
+    SELECT 
+      p.id,
+      p.valor_total,
+      p.status,
+      p.data_pedido,
+      MIN(pr.vendedor_id) AS vendedor_id,
+      GROUP_CONCAT(pr.nome SEPARATOR ', ') AS itens
     FROM pedidos p
-    JOIN cliente c ON p.cliente_id = c.id
-    JOIN vendedor v ON p.vendedor_id = v.id
+    JOIN itens_pedido i ON i.pedido_id = p.id
+    JOIN produtos pr ON pr.id = i.produto_id
+    WHERE p.cliente_id = ?
+    GROUP BY p.id
+    ORDER BY p.id DESC
   `;
 
-  db.query(sql, (err, result) => {
-    if (err) return res.status(500).send(err);
-    res.json(result);
+  db.query(sql, [clienteId], (err, pedidos) => {
+    if (err) return res.send(err);
+
+    res.render("pedidos", {
+      pedidos: pedidos || [],
+      user: req.session.user
+    });
   });
 });
 
-// 🔹 Buscar pedido com itens
-router.get("/:id", (req, res) => {
-  const pedidoId = req.params.id;
+// FINALIZAR PEDIDO (SEPARADO POR VENDEDOR)
+router.post("/finalizar", authCliente, (req, res) => {
+  const clienteId = req.session.user.id;
+  const carrinho = req.session.carrinho || [];
 
-  const sqlPedido = `
-    SELECT * FROM pedidos WHERE id = ?
-  `;
+  if (carrinho.length === 0) {
+    return res.redirect("/cliente");
+  }
 
-  const sqlItens = `
-    SELECT i.*, p.nome
-    FROM itens_pedido i
-    JOIN produtos p ON i.produto_id = p.id
-    WHERE i.pedido_id = ?
-  `;
+  // AGRUPAR POR VENDEDOR
+  const pedidosPorVendedor = {};
 
-  db.query(sqlPedido, [pedidoId], (err, pedido) => {
-    if (err) return res.status(500).send(err);
-
-    db.query(sqlItens, [pedidoId], (err, itens) => {
-      if (err) return res.status(500).send(err);
-
-      res.json({
-        pedido: pedido[0],
-        itens
-      });
-    });
+  carrinho.forEach(item => {
+    if (!pedidosPorVendedor[item.vendedor_id]) {
+      pedidosPorVendedor[item.vendedor_id] = [];
+    }
+    pedidosPorVendedor[item.vendedor_id].push(item);
   });
+
+  const vendedores = Object.keys(pedidosPorVendedor);
+
+  vendedores.forEach(vendedorId => {
+    const itens = pedidosPorVendedor[vendedorId];
+
+    const total = itens.reduce((soma, item) => {
+      return soma + item.preco * item.quantidade;
+    }, 0);
+
+    db.query(
+      "INSERT INTO pedidos (cliente_id, valor_total, status) VALUES (?, ?, 'PENDENTE')",
+      [clienteId, total],
+      (err, result) => {
+        if (err) return res.send(err);
+
+        const pedidoId = result.insertId;
+
+        itens.forEach(item => {
+          db.query(
+            "INSERT INTO itens_pedido (pedido_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)",
+            [pedidoId, item.id, item.quantidade, item.preco]
+          );
+        });
+      }
+    );
+  });
+
+  // LIMPA CARRINHO
+  req.session.carrinho = [];
+
+  res.redirect("/pedidos");
 });
 
 module.exports = router;

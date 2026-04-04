@@ -12,8 +12,7 @@ const registerRoutes = require("./routes/register");
 const clienteRoutes = require("./routes/cliente");
 const dashboardRoutes = require("./routes/dashboard");
 const pedidosRoutes = require("./routes/pedidos");
-const produtosRoutes = require("./routes/produtos");
-const avaliacoesRoutes = require("./routes/avaliacoes");
+const carrinhoRoutes = require("./routes/carrinho");
 
 // CONFIG
 app.set("view engine", "ejs");
@@ -41,6 +40,7 @@ app.use(session({
 // DISPONIBILIZA USER GLOBALMENTE NAS VIEWS
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
+  res.locals.session = req.session;
   next();
 });
 
@@ -50,8 +50,9 @@ app.use("/register", registerRoutes);
 app.use("/cliente", clienteRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/pedidos", pedidosRoutes);
-app.use("/produtos", produtosRoutes);
-app.use("/avaliacoes", avaliacoesRoutes);
+app.use("/carrinho", carrinhoRoutes);
+app.use("/avaliacoes", require("./routes/avaliacoes"));
+
 
 // START
 app.listen(3000, () => {

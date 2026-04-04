@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 16-Mar-2026 às 18:12
--- Versão do servidor: 10.4.27-MariaDB
--- versão do PHP: 8.2.0
+-- Tempo de geração: 04/04/2026 às 07:55
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,54 +24,53 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `avaliacoes`
+-- Estrutura para tabela `avaliacoes`
 --
 
 CREATE TABLE `avaliacoes` (
   `id` int(11) NOT NULL,
-  `cliente_id` int(11) NOT NULL,
-  `vendedor_id` int(11) NOT NULL,
-  `nota` int(11) NOT NULL,
-  `comentario` varchar(80) DEFAULT NULL,
-  `data_avaliacao` datetime DEFAULT current_timestamp()
+  `cliente_id` int(11) DEFAULT NULL,
+  `vendedor_id` int(11) DEFAULT NULL,
+  `pedido_id` int(11) DEFAULT NULL,
+  `nota` int(11) DEFAULT NULL,
+  `comentario` text DEFAULT NULL,
+  `data_avaliacao` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `avaliacoes`
+-- Despejando dados para a tabela `avaliacoes`
 --
 
-INSERT INTO `avaliacoes` (`id`, `cliente_id`, `vendedor_id`, `nota`, `comentario`, `data_avaliacao`) VALUES
-(1, 1, 1, 5, 'Muito bom!', '2026-03-16 14:11:15'),
-(2, 2, 2, 4, 'Doces excelentes', '2026-03-16 14:11:15');
+INSERT INTO `avaliacoes` (`id`, `cliente_id`, `vendedor_id`, `pedido_id`, `nota`, `comentario`, `data_avaliacao`) VALUES
+(1, 1, 1, 3, 5, 'Coxinha muito boa', '2026-04-04 05:29:17'),
+(2, 1, 1, 2, 4, 'Um pouco salgada, mas estava boa.', '2026-04-04 05:29:43');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `cliente`
+-- Estrutura para tabela `cliente`
 --
 
 CREATE TABLE `cliente` (
   `id` int(11) NOT NULL,
   `nome` varchar(50) NOT NULL,
   `email` varchar(150) NOT NULL,
-  `senha` varchar(100) NOT NULL,
+  `senha` varchar(255) NOT NULL,
   `data_criacao` datetime DEFAULT current_timestamp(),
   `status` enum('ATIVO','INATIVO') DEFAULT 'ATIVO'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `cliente`
+-- Despejando dados para a tabela `cliente`
 --
 
 INSERT INTO `cliente` (`id`, `nome`, `email`, `senha`, `data_criacao`, `status`) VALUES
-(1, 'João Silva', 'joao@email.com', '123456', '2026-03-16 14:11:13', 'ATIVO'),
-(2, 'Maria Souza', 'maria@email.com', '123456', '2026-03-16 14:11:13', 'ATIVO'),
-(3, 'Pedro Santos', 'pedro@email.com', '123456', '2026-03-16 14:11:13', 'ATIVO');
+(1, 'Maria', 'maria@if.com.br', '12345', '2026-04-04 00:36:04', 'ATIVO');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `itens_pedido`
+-- Estrutura para tabela `itens_pedido`
 --
 
 CREATE TABLE `itens_pedido` (
@@ -83,106 +82,102 @@ CREATE TABLE `itens_pedido` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `itens_pedido`
+-- Despejando dados para a tabela `itens_pedido`
 --
 
 INSERT INTO `itens_pedido` (`id`, `pedido_id`, `produto_id`, `quantidade`, `preco_unitario`) VALUES
-(1, 1, 1, 1, '4.00'),
-(2, 1, 2, 1, '5.00');
+(1, 2, 1, 1, 3.99),
+(2, 3, 1, 1, 3.99);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `pedidos`
+-- Estrutura para tabela `pedidos`
 --
 
 CREATE TABLE `pedidos` (
   `id` int(11) NOT NULL,
   `cliente_id` int(11) NOT NULL,
   `vendedor_id` int(11) NOT NULL,
-  `valor_total` decimal(10,2) DEFAULT NULL,
+  `valor_total` decimal(10,2) NOT NULL,
   `status` enum('PENDENTE','CONFIRMADO','ENTREGUE','CANCELADO') DEFAULT 'PENDENTE',
   `data_pedido` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `pedidos`
+-- Despejando dados para a tabela `pedidos`
 --
 
 INSERT INTO `pedidos` (`id`, `cliente_id`, `vendedor_id`, `valor_total`, `status`, `data_pedido`) VALUES
-(1, 1, 1, '9.00', 'CONFIRMADO', '2026-03-16 14:11:14');
+(2, 1, 0, 3.99, 'ENTREGUE', '2026-04-04 01:32:39'),
+(3, 1, 0, 3.99, 'ENTREGUE', '2026-04-04 02:16:40');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `produtos`
+-- Estrutura para tabela `produtos`
 --
 
 CREATE TABLE `produtos` (
   `id` int(11) NOT NULL,
   `vendedor_id` int(11) NOT NULL,
-  `nome` varchar(20) NOT NULL,
-  `descricao` varchar(30) DEFAULT NULL,
+  `nome` varchar(100) NOT NULL,
+  `descricao` text DEFAULT NULL,
   `preco` decimal(10,2) NOT NULL,
   `estoque` int(11) DEFAULT 0,
-  `imagem_url` varchar(255) DEFAULT NULL,
   `status` enum('ATIVO','INATIVO') DEFAULT 'ATIVO',
   `data_criacao` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `produtos`
+-- Despejando dados para a tabela `produtos`
 --
 
-INSERT INTO `produtos` (`id`, `vendedor_id`, `nome`, `descricao`, `preco`, `estoque`, `imagem_url`, `status`, `data_criacao`) VALUES
-(1, 1, 'Coxinha', 'Coxinha de frango', '4.00', 50, 'coxinha.jpg', 'ATIVO', '2026-03-16 14:11:13'),
-(2, 1, 'Pastel', 'Pastel de queijo', '5.00', 40, 'pastel.jpg', 'ATIVO', '2026-03-16 14:11:13'),
-(3, 2, 'Brigadeiro', 'Brigadeiro gourmet', '3.00', 100, 'brigadeiro.jpg', 'ATIVO', '2026-03-16 14:11:13');
+INSERT INTO `produtos` (`id`, `vendedor_id`, `nome`, `descricao`, `preco`, `estoque`, `status`, `data_criacao`) VALUES
+(1, 1, 'Coxinha', 'Casquinha crocante e recheio irresistível!', 3.99, 7, 'ATIVO', '2026-04-04 00:34:28'),
+(2, 1, 'Sanduíche', 'Saudável e Delicioso', 7.00, 4, 'ATIVO', '2026-04-04 00:35:13');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `vendedor`
+-- Estrutura para tabela `vendedor`
 --
 
 CREATE TABLE `vendedor` (
   `id` int(11) NOT NULL,
   `nome` varchar(50) NOT NULL,
   `email` varchar(150) NOT NULL,
-  `senha` varchar(100) NOT NULL,
+  `senha` varchar(255) NOT NULL,
   `data_criacao` datetime DEFAULT current_timestamp(),
   `status` enum('ATIVO','INATIVO') DEFAULT 'ATIVO'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Extraindo dados da tabela `vendedor`
+-- Despejando dados para a tabela `vendedor`
 --
 
 INSERT INTO `vendedor` (`id`, `nome`, `email`, `senha`, `data_criacao`, `status`) VALUES
-(1, 'Lanchonete do IF', 'lanchonete@if.com', '123456', '2026-03-16 14:11:13', 'ATIVO'),
-(2, 'Doces da Ana', 'ana@if.com', '123456', '2026-03-16 14:11:13', 'ATIVO');
+(1, 'Leo Lanches', 'leo@if.com.br', '12345', '2026-04-04 00:08:33', 'ATIVO');
 
 --
 -- Índices para tabelas despejadas
 --
 
 --
--- Índices para tabela `avaliacoes`
+-- Índices de tabela `avaliacoes`
 --
 ALTER TABLE `avaliacoes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cliente_id` (`cliente_id`),
-  ADD KEY `vendedor_id` (`vendedor_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Índices para tabela `cliente`
+-- Índices de tabela `cliente`
 --
 ALTER TABLE `cliente`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Índices para tabela `itens_pedido`
+-- Índices de tabela `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
   ADD PRIMARY KEY (`id`),
@@ -190,7 +185,7 @@ ALTER TABLE `itens_pedido`
   ADD KEY `produto_id` (`produto_id`);
 
 --
--- Índices para tabela `pedidos`
+-- Índices de tabela `pedidos`
 --
 ALTER TABLE `pedidos`
   ADD PRIMARY KEY (`id`),
@@ -198,21 +193,21 @@ ALTER TABLE `pedidos`
   ADD KEY `vendedor_id` (`vendedor_id`);
 
 --
--- Índices para tabela `produtos`
+-- Índices de tabela `produtos`
 --
 ALTER TABLE `produtos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `vendedor_id` (`vendedor_id`);
 
 --
--- Índices para tabela `vendedor`
+-- Índices de tabela `vendedor`
 --
 ALTER TABLE `vendedor`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT de tabelas despejadas
+-- AUTO_INCREMENT para tabelas despejadas
 --
 
 --
@@ -225,7 +220,7 @@ ALTER TABLE `avaliacoes`
 -- AUTO_INCREMENT de tabela `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `itens_pedido`
@@ -237,47 +232,39 @@ ALTER TABLE `itens_pedido`
 -- AUTO_INCREMENT de tabela `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `vendedor`
 --
 ALTER TABLE `vendedor`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- Restrições para despejos de tabelas
+-- Restrições para tabelas despejadas
 --
 
 --
--- Limitadores para a tabela `avaliacoes`
---
-ALTER TABLE `avaliacoes`
-  ADD CONSTRAINT `avaliacoes_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `cliente` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `avaliacoes_ibfk_2` FOREIGN KEY (`vendedor_id`) REFERENCES `vendedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Limitadores para a tabela `itens_pedido`
+-- Restrições para tabelas `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
   ADD CONSTRAINT `itens_pedido_ibfk_1` FOREIGN KEY (`pedido_id`) REFERENCES `pedidos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `itens_pedido_ibfk_2` FOREIGN KEY (`produto_id`) REFERENCES `produtos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Limitadores para a tabela `pedidos`
+-- Restrições para tabelas `pedidos`
 --
 ALTER TABLE `pedidos`
-  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `cliente` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pedidos_ibfk_2` FOREIGN KEY (`vendedor_id`) REFERENCES `vendedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`cliente_id`) REFERENCES `cliente` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Limitadores para a tabela `produtos`
+-- Restrições para tabelas `produtos`
 --
 ALTER TABLE `produtos`
   ADD CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`vendedor_id`) REFERENCES `vendedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

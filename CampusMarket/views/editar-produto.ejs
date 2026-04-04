@@ -1,0 +1,18 @@
+<%- include('partials/header') %>
+
+<div class="container mt-4">
+
+<h3>Editar Produto</h3>
+
+<form action="/dashboard/produtos/editar/<%= produto.id %>" method="POST">
+
+<input class="form-control mb-2" name="nome" value="<%= produto.nome %>">
+<textarea class="form-control mb-2" name="descricao"><%= produto.descricao %></textarea>
+<input class="form-control mb-2" type="number" step="0.01" name="preco" value="<%= produto.preco %>">
+<input class="form-control mb-2" type="number" name="estoque" value="<%= produto.estoque %>">
+
+<button class="btn btn-primary">Salvar</button>
+
+</form>
+
+</div>

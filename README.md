@@ -42,4 +42,4 @@
 - Apresentação "Conclusão"
 
 # Status
-## Backend "API + CRUD em desenvolvimento"
+## Diferenciais "Sistema avançado"

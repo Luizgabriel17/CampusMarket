@@ -2,34 +2,40 @@ const express = require("express");
 const router = express.Router();
 const db = require("../database/database");
 
-// 🔹 Criar avaliação
-router.post("/", (req, res) => {
-  const { cliente_id, vendedor_id, nota, comentario } = req.body;
+function authCliente(req, res, next) {
+  if (!req.session.user) return res.redirect("/login");
+  next();
+}
 
-  const sql = `
-    INSERT INTO avaliacoes (cliente_id, vendedor_id, nota, comentario)
-    VALUES (?, ?, ?, ?)
-  `;
+// AVALIAR
+router.post("/avaliar", authCliente, (req, res) => {
 
-  db.query(sql, [cliente_id, vendedor_id, nota, comentario], (err) => {
-    if (err) return res.status(500).send(err);
-    res.send("Avaliação enviada");
-  });
-});
+  const { vendedor_id, pedido_id, nota, comentario } = req.body;
+  const cliente_id = req.session.user.id;
 
-// 🔹 Listar avaliações de um vendedor
-router.get("/vendedor/:id", (req, res) => {
-  const sql = `
-    SELECT a.*, c.nome AS cliente_nome
-    FROM avaliacoes a
-    JOIN cliente c ON a.cliente_id = c.id
-    WHERE vendedor_id = ?
-  `;
+  // EVITA DUPLICAR AVALIAÇÃO
+  db.query(
+    "SELECT * FROM avaliacoes WHERE pedido_id = ?",
+    [pedido_id],
+    (err, result) => {
 
-  db.query(sql, [req.params.id], (err, result) => {
-    if (err) return res.status(500).send(err);
-    res.json(result);
-  });
+      if (result.length > 0) {
+        return res.send("Pedido já avaliado");
+      }
+
+      db.query(
+        "INSERT INTO avaliacoes (cliente_id, vendedor_id, pedido_id, nota, comentario) VALUES (?, ?, ?, ?, ?)",
+        [cliente_id, vendedor_id, pedido_id, nota, comentario],
+        (err2) => {
+          if (err2) return res.send(err2);
+
+          res.redirect("/pedidos");
+        }
+      );
+
+    }
+  );
+
 });
 
 module.exports = router;

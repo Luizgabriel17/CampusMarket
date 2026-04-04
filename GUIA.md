@@ -1,7 +1,7 @@
 # PASSO A PASSO
 
-## 1. PLANEJAMENTO (Base do sistema)
-- Definir objetivo do sistema (Marketplace de lanches entre alunos)
+## 1. PLANEJAMENTO (Base do sistema) - CUMPRIDO TOTALMENTE
+- Definir objetivo do sistema (Marketplace de lanches entre alunos) 
 - Definir tipos de usuários:
   - Cliente
   - Vendedor
@@ -19,7 +19,7 @@
 
 ---
 
-## 2. MODELAGEM DO BANCO DE DADOS
+## 2. MODELAGEM DO BANCO DE DADOS - CUMPRIDO TOTALMENTE
 - Criar banco de dados
 - Criar tabelas:
   - `usuarios` (id, nome, email, senha, tipo)
@@ -32,7 +32,7 @@
 
 ---
 
-## 3. BACKEND (API + CRUD)
+## 3. BACKEND (API + CRUD) - CUMPRIDO PARCIALMENTE
 
 ### Autenticação
 - Criar rotas:
@@ -59,7 +59,7 @@
 
 ---
 
-## 4. FRONTEND (Interface)
+## 4. FRONTEND (Interface) - CUMPRIDO TOTALMENTE
 
 ### Telas principais:
 - Tela de Login
@@ -78,7 +78,7 @@
 
 ---
 
-## 5. DIFERENCIAIS (Sistema avançado)
+## 5. DIFERENCIAIS (Sistema avançado) - CUMPRIDO PARCIALMENTE
 - Filtro de produtos (preço, nome)
 - Upload de imagem do lanche
 - Sistema de avaliações ⭐
@@ -89,7 +89,7 @@
 
 ---
 
-## 6. SEGURANÇA
+## 6. SEGURANÇA - CUMPRIDO PARCIALMENTE
 - Hash de senha (bcrypt)
 - Proteção de rotas (middleware)
 - Validação de dados (backend)
@@ -97,7 +97,7 @@
 
 ---
 
-## 7. TESTES
+## 7. TESTES - NÃO CUMPRIDO
 - Testar todas as rotas no Postman
 - Testar fluxo completo:
   - Cadastro → Login → Compra
@@ -106,7 +106,7 @@
 
 ---
 
-## 8. DEPLOY (Modo Beta)
+## 8. DEPLOY (Modo Beta) - NÃO CUMPRIDO
 - Backend: Render / Railway
 - Banco: Railway / PlanetScale
 - Frontend: Vercel / Netlify
@@ -114,7 +114,7 @@
 
 ---
 
-## 9. FINALIZAÇÃO
+## 9. FINALIZAÇÃO - NÃO CUMPRIDO
 - Ajustar layout
 - Melhorar UX
 - Documentar projeto:

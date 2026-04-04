@@ -1,0 +1,104 @@
+body {
+  background: #f5f6fa;
+  font-family: Arial, sans-serif;
+}
+
+/* SIDEBAR */
+.sidebar {
+  height: 100vh;
+  background: #212529;
+  color: white;
+  padding: 20px;
+  position: fixed;
+  width: 220px;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  margin-bottom: 15px;
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  color: #ffc107;
+}
+
+/* CONTEÚDO */
+.content {
+  margin-left: 240px;
+  padding: 20px;
+}
+
+/* CARD PRODUTO */
+.card-produto {
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.card-produto:hover {
+  transform: scale(1.02);
+}
+
+/* BUSCA */
+.search-box {
+  margin-bottom: 20px;
+}
+
+/* CARRINHO LATERAL */
+.offcanvas {
+  width: 350px;
+}
+.offcanvas-body {
+  max-height: 100vh;
+  overflow-y: auto;
+}
+button {
+  border-radius: 8px;
+}
+/* DASHBOARD VENDEDOR */
+
+.dashboard {
+  margin-left: 240px;
+  padding: 20px;
+}
+
+.card-resumo {
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  font-weight: bold;
+}
+
+.bg-vendas { background: #28a745; }
+.bg-pedidos { background: #007bff; }
+.bg-faturamento { background: #ffc107; color: black; }
+
+/* PRODUTOS */
+.produto-card {
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.produto-card:hover {
+  transform: scale(1.02);
+}
+
+/* PEDIDOS */
+.pedido-card {
+  border-left: 5px solid #28a745;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: white;
+  border-radius: 8px;
+}
+
+/* BOTÕES */
+.btn {
+  border-radius: 8px;
+}
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}

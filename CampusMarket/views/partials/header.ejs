@@ -1,0 +1,20 @@
+<div class="sidebar">
+
+  <h4>🍔 CampusMarket</h4>
+
+  <% if (user.tipo === "cliente") { %>
+    <a href="/cliente">🏠 Início</a>
+    <a href="#" data-bs-toggle="offcanvas" data-bs-target="#carrinho">🛒 Carrinho</a>
+    <a href="/pedidos">📦 Pedidos</a>
+  <% } %>
+
+  <% if (user.tipo === "vendedor") { %>
+    <a href="/dashboard">📊 Dashboard</a>
+  <% } %>
+
+  <hr>
+
+  <p>👤 <%= user.nome %></p>
+  <a href="/logout">Sair</a>
+
+</div>
