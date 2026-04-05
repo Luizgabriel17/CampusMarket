@@ -1,26 +1,175 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-  <title>Login</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<meta charset="UTF-8">
+<title>Login - CampusMarket</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+
+body{
+  background:#ffffff;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* CARD */
+.card{
+  background:#f8f8f8;
+  padding:40px 30px;
+  border-radius:20px;
+  width:350px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.1);
+  animation:fadeUp 1s ease;
+}
+
+/* LOGO */
+.logo{
+  text-align:center;
+  font-weight:800;
+  font-size:1.6rem;
+  color:#ff5a1f;
+  margin-bottom:10px;
+  animation:fadeDown 1s ease;
+}
+
+/* TITLE ANIMADO */
+.title{
+  text-align:center;
+  font-size:1.6rem;
+  margin-bottom:25px;
+  overflow:hidden;
+  white-space:nowrap;
+  border-right:3px solid #ff5a1f;
+  width:0;
+  animation:typing 2s steps(20) forwards, blink 0.7s infinite;
+}
+
+/* INPUT */
+.input-group{
+  position:relative;
+  margin-bottom:20px;
+  animation:fadeUp 1s ease;
+}
+
+.input-group input{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  background:white;
+  outline:none;
+}
+
+.input-group input:focus{
+  border-color:#ff5a1f;
+  box-shadow:0 0 10px rgba(255,90,31,0.3);
+}
+
+/* LABEL */
+.input-group label{
+  position:absolute;
+  top:50%;
+  left:12px;
+  transform:translateY(-50%);
+  color:#999;
+  transition:0.3s;
+}
+
+.input-group input:focus + label,
+.input-group input:valid + label{
+  top:-8px;
+  font-size:0.75rem;
+  color:#ff5a1f;
+  background:#f8f8f8;
+  padding:0 5px;
+}
+
+/* BUTTON */
+.btn{
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  background:#ff5a1f;
+  color:white;
+  font-weight:700;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(255,90,31,0.3);
+}
+
+/* LINK */
+.link{
+  text-align:center;
+  margin-top:15px;
+  font-size:0.9rem;
+}
+
+.link a{
+  color:#ff5a1f;
+  text-decoration:none;
+}
+
+/* ANIMAÇÕES */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes fadeDown{
+  from{opacity:0;transform:translateY(-20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+@keyframes typing{
+  to{width:100%;}
+}
+
+@keyframes blink{
+  50%{border-color:transparent;}
+}
+</style>
 </head>
 
-<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+<body>
 
-<div class="card p-4 shadow" style="width: 350px; border-radius: 20px;">
-  <h3 class="text-center mb-3">🔐 Login</h3>
+<div class="card">
+
+  <div class="logo">CampusMarket</div>
+  <div class="title">🔐 Login</div>
 
   <form action="/login" method="POST">
-    <input class="form-control mb-3" type="email" name="email" placeholder="Email" required>
-    <input class="form-control mb-3" type="password" name="senha" placeholder="Senha" required>
 
-    <button class="btn btn-danger w-100">Entrar</button>
+    <div class="input-group">
+      <input type="email" name="email" required>
+      <label>Email</label>
+    </div>
+
+    <div class="input-group">
+      <input type="password" name="senha" required>
+      <label>Senha</label>
+    </div>
+
+    <button class="btn">Entrar</button>
+
   </form>
 
-  <p class="text-center mt-3">
+  <div class="link">
     Não tem conta? <a href="/register">Cadastre-se</a>
-  </p>
+  </div>
+
 </div>
+
 <%- include('partials/footer') %>
+
 </body>
 </html>

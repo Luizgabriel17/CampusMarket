@@ -1,15 +1,36 @@
-<footer class="bg-dark text-white mt-5 p-4">
+<style>
+.footer-custom{
+  max-width:300px;
+  color:var(--subtext);
+  font-size:0.9rem;
+  line-height:1.5;
+  opacity:0.9;
+  animation:fadeRight 1.5s ease;
+}
 
-  <div class="container text-center">
+.footer-custom strong{
+  color:var(--primary);
+}
 
-    <h5>🍔 CampusMarket</h5>
+.footer-custom span{
+  display:block;
+  margin-top:5px;
+  font-size:0.8rem;
+  opacity:0.7;
+}
 
-    <p>Marketplace de lanches acadêmico</p>
+@keyframes fadeRight{
+  from{opacity:0; transform:translateX(30px);}
+  to{opacity:1; transform:translateX(0);}
+}
+</style>
 
-    <small>
-      Desenvolvido por Luiz Gabriel • TCC Técnico em Informática
-    </small>
+<div class="footer-custom">
+  🍔 <strong>CampusMarket</strong><br>
+  Marketplace de lanches acadêmico
 
-  </div>
-
-</footer>
+  <span>
+    Desenvolvido por Luiz Gabriel <br>
+    TCC Técnico em Informática
+  </span>
+</div>

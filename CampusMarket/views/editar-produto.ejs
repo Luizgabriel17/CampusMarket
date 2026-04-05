@@ -1,18 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Editar Produto - CampusMarket</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+
+body{
+  background:#ffffff;
+  display:flex;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:220px;
+  height:100vh;
+  background:#f8f8f8;
+  padding:20px;
+  position:fixed;
+}
+
+/* CONTAINER */
+.content{
+  margin-left:240px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* CARD FORM */
+.form-card{
+  width:100%;
+  max-width:500px;
+  background:#fff;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.08);
+  animation:fadeUp 0.6s ease;
+}
+
+/* TITLE */
+.form-card h3{
+  font-weight:800;
+  margin-bottom:20px;
+}
+
+/* INPUT */
+.form-control{
+  border-radius:12px;
+  padding:12px;
+  border:1px solid #ddd;
+  transition:0.3s;
+}
+
+.form-control:focus{
+  border-color:#ff5a1f;
+  box-shadow:0 0 0 3px rgba(255,90,31,0.15);
+}
+
+/* BUTTON */
+.btn-main{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:#ff5a1f;
+  color:white;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.btn-main:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(255,90,31,0.2);
+}
+
+/* ANIMAÇÃO */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
 <%- include('partials/header') %>
 
-<div class="container mt-4">
+<div class="content">
 
-<h3>Editar Produto</h3>
+  <div class="form-card">
 
-<form action="/dashboard/produtos/editar/<%= produto.id %>" method="POST">
+    <h3>✏️ Editar Produto</h3>
 
-<input class="form-control mb-2" name="nome" value="<%= produto.nome %>">
-<textarea class="form-control mb-2" name="descricao"><%= produto.descricao %></textarea>
-<input class="form-control mb-2" type="number" step="0.01" name="preco" value="<%= produto.preco %>">
-<input class="form-control mb-2" type="number" name="estoque" value="<%= produto.estoque %>">
+    <form action="/dashboard/produtos/editar/<%= produto.id %>" method="POST">
 
-<button class="btn btn-primary">Salvar</button>
+      <input class="form-control mb-3" name="nome" value="<%= produto.nome %>" required>
 
-</form>
+      <textarea class="form-control mb-3" name="descricao"><%= produto.descricao %></textarea>
+
+      <input class="form-control mb-3" type="number" step="0.01" name="preco" value="<%= produto.preco %>" required>
+
+      <input class="form-control mb-3" type="number" name="estoque" value="<%= produto.estoque %>" required>
+
+      <button class="btn-main">Salvar Alterações</button>
+
+    </form>
+
+  </div>
 
 </div>
+
+</body>
+</html>

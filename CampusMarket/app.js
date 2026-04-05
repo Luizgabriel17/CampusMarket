@@ -52,6 +52,15 @@ app.use("/dashboard", dashboardRoutes);
 app.use("/pedidos", pedidosRoutes);
 app.use("/carrinho", carrinhoRoutes);
 app.use("/avaliacoes", require("./routes/avaliacoes"));
+app.get('/', (req, res) => {
+  res.render('landing');
+});
+app.get('/redirect', (req, res) => {
+  res.render('redirect');
+});
+app.get('/redirect-cliente', (req, res) => {
+  res.render('redirect-cliente');
+});
 
 
 // START

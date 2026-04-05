@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>CampusMarket</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+
+body{
+  background:#0f172a;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* 🔥 NAVBAR */
+.navbar{
+  position:fixed;
+  width:100%;
+  top:0;
+  padding:20px 8%;
+  display:flex;
+  justify-content:space-between;
+  backdrop-filter:blur(10px);
+  background:rgba(15,23,42,0.6);
+  z-index:100;
+}
+
+.logo{
+  font-weight:800;
+  color:#ff5a1f;
+  font-size:1.4rem;
+}
+
+.nav-btn{
+  background:#ff5a1f;
+  border:none;
+  padding:10px 20px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  color:white;
+}
+
+/* HERO */
+.hero{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:120px 8%;
+  min-height:100vh;
+}
+
+.hero-text{
+  max-width:550px;
+}
+
+.hero-text h1{
+  font-size:3.5rem;
+}
+
+.highlight{color:#ff5a1f;}
+
+.hero-text p{
+  margin-top:20px;
+  color:#cbd5e1;
+  font-size:1.2rem;
+}
+
+.buttons{
+  margin-top:30px;
+  display:flex;
+  gap:15px;
+}
+
+.btn{
+  padding:14px 25px;
+  border-radius:12px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  transition:.3s;
+}
+
+.primary{background:#ff5a1f;color:white;}
+.secondary{background:transparent;border:1px solid #fff;color:white;}
+
+.btn:hover{transform:translateY(-3px);}
+
+/* 📱 MOCKUP */
+.phone{
+  width:260px;
+  height:520px;
+  border-radius:30px;
+  background:black;
+  padding:10px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
+  animation:float 5s infinite;
+}
+
+.screen{
+  background:white;
+  width:100%;
+  height:100%;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.screen img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* 🧠 COMO FUNCIONA */
+.steps{
+  padding:100px 8%;
+  text-align:center;
+}
+
+.steps h2{
+  font-size:2.5rem;
+  margin-bottom:40px;
+}
+
+.step-container{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  flex-wrap:wrap;
+}
+
+.step{
+  background:rgba(255,255,255,0.05);
+  padding:25px;
+  border-radius:16px;
+  width:250px;
+  backdrop-filter:blur(10px);
+  transition:.3s;
+}
+
+.step:hover{transform:translateY(-10px);}
+
+/* 💬 DEPOIMENTOS */
+.testimonials{
+  padding:100px 8%;
+  text-align:center;
+}
+
+.testimonial-box{
+  display:flex;
+  gap:20px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+
+.testimonial{
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:16px;
+  width:280px;
+}
+
+/* 🚀 CTA FINAL */
+.cta{
+  padding:100px 8%;
+  text-align:center;
+  background:linear-gradient(135deg,#ff5a1f,#ff8c42);
+}
+
+.cta h2{
+  font-size:2.5rem;
+}
+
+.cta button{
+  margin-top:20px;
+}
+
+/* ✨ ANIMAÇÕES */
+.reveal{
+  opacity:0;
+  transform:translateY(40px);
+  transition:1s;
+}
+
+.reveal.active{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-20px);}
+}
+
+/* RESPONSIVO */
+@media(max-width:900px){
+  .hero{flex-direction:column;text-align:center;}
+  .phone{margin-top:40px;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">CampusMarket</div>
+  <a href="/redirect"><button class="nav-btn">Entrar</button></a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+
+<div class="hero-text">
+  <h1>Transforme fome em <span class="highlight">renda</span> 💸</h1>
+
+  <p>
+    Descubra lanches incríveis ou comece seu próprio negócio dentro do campus.  
+    Simples, rápido e lucrativo.
+  </p>
+
+  <div class="buttons">
+    <a href="/redirect"><button class="btn primary">Começar agora</button></a>
+    <a href="/redirect"><button class="btn secondary">Criar conta</button></a>
+  </div>
+</div>
+
+<!-- 📱 MOCKUP -->
+<div class="phone">
+  <div class="screen">
+    <img src="https://images.unsplash.com/photo-1550547660-d9450f859349">
+  </div>
+</div>
+
+</section>
+
+<!-- 🧠 COMO FUNCIONA -->
+<section class="steps reveal">
+  <h2>Como funciona 🚀</h2>
+
+  <div class="step-container">
+
+    <div class="step">
+      <h3>1️⃣ Crie sua conta</h3>
+      <p>Leva menos de 1 minuto para começar.</p>
+    </div>
+
+    <div class="step">
+      <h3>2️⃣ Explore ou venda</h3>
+      <p>Compre lanches ou comece seu negócio.</p>
+    </div>
+
+    <div class="step">
+      <h3>3️⃣ Ganhe dinheiro</h3>
+      <p>Venda para colegas dentro do campus.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- 💬 DEPOIMENTOS -->
+<section class="testimonials reveal">
+
+  <h2>O que os alunos dizem 💬</h2>
+
+  <div class="testimonial-box">
+
+    <div class="testimonial">
+      <p>"Comecei a vender brigadeiro e já faço renda toda semana!"</p>
+      <strong>- Aluno IFRN</strong>
+    </div>
+
+    <div class="testimonial">
+      <p>"Muito mais fácil pedir lanche no intervalo."</p>
+      <strong>- Estudante</strong>
+    </div>
+
+    <div class="testimonial">
+      <p>"Melhor ideia dentro do campus!"</p>
+      <strong>- Usuário</strong>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- 🚀 CTA FINAL -->
+<section class="cta">
+  <h2>Comece agora e transforme sua rotina 🎯</h2>
+
+  <a href="/redirect">
+    <button class="btn primary">Criar conta grátis</button>
+  </a>
+</section>
+
+<!-- JS ANIMAÇÃO -->
+<script>
+const reveals = document.querySelectorAll('.reveal');
+
+window.addEventListener('scroll', () => {
+  reveals.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    if(top < window.innerHeight - 100){
+      el.classList.add('active');
+    }
+  });
+});
+</script>
+
+</body>
+</html>

@@ -32,7 +32,7 @@ router.post("/login", (req, res) => {
       };
 
       return req.session.save(() => {
-        res.redirect("/cliente");
+        res.redirect("/redirect-cliente");
       });
     }
 
