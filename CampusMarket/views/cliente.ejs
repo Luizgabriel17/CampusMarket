@@ -4,56 +4,81 @@
 <meta charset="UTF-8">
 <title>Cliente - CampusMarket</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
-  background:#ffffff;
+  background:#f1f5f9;
   display:flex;
 }
 
-/* SIDEBAR */
+/* SIDEBAR (PADRÃO NOVO) */
 .sidebar{
-  width:220px;
+  width:230px;
   height:100vh;
-  background:#f8f8f8;
-  padding:20px;
+  background:#ffffff;
+  padding:25px 20px;
   position:fixed;
+  border-right:1px solid #e2e8f0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
 }
 
-.sidebar h4{
+.logo{
+  font-weight:800;
+  font-size:1.3rem;
   color:#ff5a1f;
-  margin-bottom:20px;
+  margin-bottom:30px;
 }
 
-.sidebar a{
+.menu a{
   display:block;
-  margin:10px 0;
-  color:#333;
+  padding:10px;
+  border-radius:10px;
+  color:#334155;
   text-decoration:none;
-  font-weight:500;
+  margin-bottom:8px;
+  transition:.2s;
 }
 
-.sidebar a:hover{
+.menu a:hover{
+  background:#f1f5f9;
+}
+
+.menu .active{
+  background:#ff5a1f;
+  color:white;
+}
+
+.user{
+  font-size:0.9rem;
+  color:#475569;
+}
+
+.user a{
+  display:block;
+  margin-top:5px;
   color:#ff5a1f;
+  text-decoration:none;
 }
 
 /* CONTENT */
 .content{
-  margin-left:240px;
-  padding:30px;
+  margin-left:230px;
+  padding:40px;
   width:100%;
 }
 
-/* HEADER TOP */
+/* TOPO */
 .top{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:20px;
+  margin-bottom:25px;
 }
 
 .top h2{
@@ -63,9 +88,9 @@ body{
 /* BUSCA */
 .search-box{
   padding:12px;
-  border-radius:10px;
+  border-radius:12px;
   border:1px solid #ddd;
-  width:300px;
+  width:280px;
 }
 
 /* FILTRO */
@@ -73,28 +98,27 @@ select{
   padding:10px;
   border-radius:10px;
   border:1px solid #ddd;
-  margin-bottom:15px;
+  margin-bottom:20px;
 }
 
 /* GRID */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:25px;
 }
 
-/* CARD PRODUTO */
+/* CARD */
 .card-produto{
   background:#fff;
   padding:20px;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  transition:.3s;
-  animation:fadeUp 0.6s ease;
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  transition:.25s;
 }
 
 .card-produto:hover{
-  transform:translateY(-5px);
+  transform:translateY(-6px);
 }
 
 .card-produto h5{
@@ -107,7 +131,7 @@ select{
   width:100%;
   padding:10px;
   border:none;
-  border-radius:10px;
+  border-radius:12px;
   background:#ff5a1f;
   color:white;
   font-weight:600;
@@ -116,21 +140,14 @@ select{
 }
 
 .btn-add:hover{
-  transform:scale(1.03);
+  transform:translateY(-2px);
 }
 
-/* ANIMAÇÃO ADICIONADO */
 .add-btn.added{
   background:#28a745;
 }
 
-@keyframes pulse{
-  0%{transform:scale(1);}
-  50%{transform:scale(1.1);}
-  100%{transform:scale(1);}
-}
-
-/* BOTÃO FLUTUANTE */
+/* FLOATING CART */
 .floating-cart{
   position:fixed;
   bottom:25px;
@@ -144,11 +161,6 @@ select{
   cursor:pointer;
   box-shadow:0 10px 25px rgba(0,0,0,0.2);
   z-index:999;
-  transition:0.3s;
-}
-
-.floating-cart:hover{
-  transform:scale(1.05);
 }
 
 .floating-cart span{
@@ -225,12 +237,10 @@ select{
 
 </div>
 
-<!-- 🛒 BOTÃO FLUTUANTE -->
 <div class="floating-cart" data-bs-toggle="offcanvas" data-bs-target="#carrinho">
   🛒 <span id="cartCount"><%= session.carrinho ? session.carrinho.length : 0 %></span>
 </div>
 
-<!-- JS FILTRO -->
 <script>
 const search = document.getElementById("search");
 const filtro = document.getElementById("filtro");
@@ -254,7 +264,6 @@ function filtrar(){
 }
 </script>
 
-<!-- ✨ ANIMAÇÃO ADD -->
 <script>
 document.querySelectorAll(".add-btn").forEach(btn => {
   btn.addEventListener("click", function(){
@@ -263,12 +272,10 @@ document.querySelectorAll(".add-btn").forEach(btn => {
 
     btn.innerHTML = "✔ Adicionado";
     btn.classList.add("added");
-    btn.style.animation = "pulse 0.3s";
 
     setTimeout(()=>{
       btn.innerHTML = original;
       btn.classList.remove("added");
-      btn.style.animation = "";
     },1000);
 
   });

@@ -1,20 +1,24 @@
 <div class="sidebar">
 
-  <h4>🍔 CampusMarket</h4>
+  <h3 class="logo">🍔 CampusMarket</h3>
 
-  <% if (user.tipo === "cliente") { %>
-    <a href="/cliente">🏠 Início</a>
-    <a href="#" data-bs-toggle="offcanvas" data-bs-target="#carrinho">🛒 Carrinho</a>
-    <a href="/pedidos">📦 Pedidos</a>
-  <% } %>
+  <div class="menu">
 
-  <% if (user.tipo === "vendedor") { %>
-    <a href="/dashboard">📊 Dashboard</a>
-  <% } %>
+    <% if (user.tipo === "cliente") { %>
+      <a href="/cliente">🏠 Início</a>
+      <a href="#" data-bs-toggle="offcanvas" data-bs-target="#carrinho">🛒 Carrinho</a>
+      <a href="/pedidos" class="active">📦 Pedidos</a>
+    <% } %>
 
-  <hr>
+    <% if (user.tipo === "vendedor") { %>
+      <a href="/dashboard">📊 Dashboard</a>
+    <% } %>
 
-  <p>👤 <%= user.nome %></p>
-  <a href="/logout">Sair</a>
+  </div>
+
+  <div class="user">
+    <p>👤 <%= user.nome %></p>
+    <a href="/logout">Sair</a>
+  </div>
 
 </div>

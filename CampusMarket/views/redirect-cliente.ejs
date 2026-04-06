@@ -4,63 +4,73 @@
 <meta charset="UTF-8">
 <title>Bem-vindo - CampusMarket</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
   height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  background:#ffffff;
+  background:#f8fafc;
 }
 
-/* CARD */
+/* 🎴 CARD */
 .card{
   text-align:center;
-  background:#f8f8f8;
-  padding:50px;
+  background:#ffffff;
+  padding:60px;
   border-radius:20px;
-  box-shadow:0 20px 60px rgba(0,0,0,0.1);
-  animation:fadeUp 1s ease;
+  box-shadow:0 15px 40px rgba(0,0,0,0.08);
+  animation:fadeUp 0.6s ease;
+  width:600px; /* 🔥 aumentado */
 }
 
+/* 🏷️ LOGO */
 .logo{
-  font-size:1.8rem;
+  font-size:2.2rem;
   font-weight:800;
   color:#ff5a1f;
 }
 
+.logo span{
+  color:#1e293b;
+}
+
+/* ✍️ TEXTO DIGITAÇÃO */
 .title{
-  font-size:1.6rem;
-  margin:20px 0;
+  font-size:1.8rem;
+  margin:25px 0;
   overflow:hidden;
   white-space:nowrap;
   border-right:3px solid #ff5a1f;
   width:0;
-  animation:typing 2s steps(30) forwards, blink 0.7s infinite;
+  animation:typing 1.2s steps(40) forwards, blink 0.6s infinite;
 }
 
+/* SUB */
 .sub{
-  color:#555;
+  color:#475569;
   margin-top:10px;
+  font-size:1.1rem;
 }
 
+/* 🔄 LOADER CENTRALIZADO */
 .loader{
-  margin-top:20px;
-  border:4px solid #eee;
+  margin:30px auto 0;
+  border:4px solid #e2e8f0;
   border-top:4px solid #ff5a1f;
   border-radius:50%;
-  width:40px;
-  height:40px;
-  animation:spin 1s linear infinite;
+  width:45px;
+  height:45px;
+  animation:spin 0.6s linear infinite;
 }
 
-/* ANIMAÇÕES */
+/* ✨ ANIMAÇÕES */
 @keyframes fadeUp{
-  from{opacity:0;transform:translateY(30px);}
+  from{opacity:0;transform:translateY(20px);}
   to{opacity:1;transform:translateY(0);}
 }
 
@@ -75,13 +85,27 @@ body{
 @keyframes spin{
   to{transform:rotate(360deg);}
 }
+
+/* 📱 RESPONSIVO */
+@media(max-width:650px){
+  .card{
+    width:90%;
+    padding:40px;
+  }
+
+  .title{
+    white-space:normal; /* evita corte no mobile */
+    border-right:none;
+  }
+}
 </style>
 </head>
 
 <body>
 
 <div class="card">
-  <div class="logo">CampusMarket</div>
+
+  <div class="logo">Campus<span>Market</span></div>
 
   <div class="title">
     Bem-vindo! Aproveite as delícias do campus 🍔
@@ -92,12 +116,14 @@ body{
   </div>
 
   <div class="loader"></div>
+
 </div>
 
 <script>
+/* ⏱️ tempo sincronizado com animação */
 setTimeout(()=>{
   window.location.href = "/cliente";
-}, 2500);
+}, 2000);
 </script>
 
 </body>

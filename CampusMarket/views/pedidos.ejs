@@ -4,73 +4,115 @@
 <meta charset="UTF-8">
 <title>Pedidos - CampusMarket</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
-  background:#ffffff;
+  background:#f1f5f9;
   display:flex;
 }
 
 /* SIDEBAR */
 .sidebar{
-  width:220px;
+  width:230px;
   height:100vh;
-  background:#f8f8f8;
-  padding:20px;
+  background:#ffffff;
+  padding:25px 20px;
   position:fixed;
+  border-right:1px solid #e2e8f0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.logo{
+  font-weight:800;
+  font-size:1.3rem;
+  color:#ff5a1f;
+  margin-bottom:30px;
+}
+
+.menu a{
+  display:block;
+  padding:10px;
+  border-radius:10px;
+  color:#334155;
+  text-decoration:none;
+  margin-bottom:8px;
+  transition:.2s;
+}
+
+.menu a:hover{
+  background:#f1f5f9;
+}
+
+.menu .active{
+  background:#ff5a1f;
+  color:white;
+}
+
+.user{
+  font-size:0.9rem;
+  color:#475569;
+}
+
+.user a{
+  display:block;
+  margin-top:5px;
+  color:#ff5a1f;
+  text-decoration:none;
 }
 
 /* CONTENT */
 .content{
-  margin-left:240px;
-  padding:30px;
+  margin-left:230px;
+  padding:40px;
   width:100%;
 }
 
 /* TITLE */
 .title{
-  font-size:1.8rem;
+  font-size:2rem;
   font-weight:800;
-  margin-bottom:20px;
+  margin-bottom:30px;
 }
 
 /* GRID */
 .grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:25px;
 }
 
 /* CARD */
 .card-pedido{
   background:#fff;
-  border-radius:16px;
-  padding:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.08);
-  animation:fadeUp 0.6s ease;
-  transition:.3s;
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  transition:.25s;
 }
 
 .card-pedido:hover{
-  transform:translateY(-5px);
+  transform:translateY(-6px);
 }
 
 /* HEADER */
 .card-header{
   display:flex;
   justify-content:space-between;
-  margin-bottom:10px;
+  align-items:center;
+  margin-bottom:12px;
 }
 
 /* STATUS */
 .status{
-  padding:5px 10px;
-  border-radius:10px;
-  font-size:0.8rem;
+  padding:6px 12px;
+  border-radius:12px;
+  font-size:0.75rem;
   font-weight:600;
 }
 
@@ -79,53 +121,59 @@ body{
 .status-entregue{background:#d4edda;color:#155724;}
 
 /* TEXT */
-.itens{font-size:0.9rem;color:#555;}
-.total{font-weight:700;margin-top:10px;}
+.itens{
+  font-size:0.95rem;
+  color:#475569;
+}
+
+.total{
+  font-weight:700;
+  margin-top:10px;
+}
 
 /* BUTTON */
 .btn-avaliar{
-  margin-top:10px;
+  margin-top:15px;
   background:#ff5a1f;
   color:white;
   border:none;
-  padding:8px 12px;
-  border-radius:10px;
+  padding:10px;
+  border-radius:12px;
   font-size:0.9rem;
   cursor:pointer;
+  width:100%;
+  transition:.2s;
+}
+
+.btn-avaliar:hover{
+  transform:translateY(-2px);
 }
 
 .btn-disabled{
-  background:#ccc !important;
+  background:#cbd5e1 !important;
   cursor:not-allowed;
 }
 
 /* MODAL */
 .modal-content{
   border-radius:16px;
-  animation:fadeUp 0.3s ease;
 }
 
-/* ⭐ ESTRELAS */
+/* ESTRELAS */
 .stars{
   display:flex;
-  gap:5px;
-  font-size:1.5rem;
+  justify-content:center;
+  gap:8px;
+  font-size:1.8rem;
   cursor:pointer;
 }
 
 .stars span{
   color:#ccc;
-  transition:0.2s;
 }
 
 .stars span.active{
   color:#ff5a1f;
-}
-
-/* ANIMAÇÃO */
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
 }
 </style>
 </head>
@@ -162,62 +210,25 @@ body{
 
       <% if (p.avaliado) { %>
 
-        <button class="btn-avaliar btn-disabled" onclick="alertaAvaliado()" disabled>
+        <button class="btn-avaliar btn-disabled" disabled>
           ✔ Já avaliado
         </button>
 
+        <small style="display:block; margin-top:5px; color:#64748b;">
+          Avaliação já enviada
+        </small>
+
       <% } else { %>
 
-        <button type="button"
-          class="btn-avaliar"
-          data-bs-toggle="modal"
-          data-bs-target="#avaliar<%= p.id %>">
+        <button 
+          type="button"
+          class="btn-avaliar abrir-avaliacao"
+          data-id="<%= p.id %>"
+          data-vendedor="<%= p.vendedor_id %>">
           ⭐ Avaliar
         </button>
 
       <% } %>
-
-      <!-- MODAL -->
-      <div class="modal fade" id="avaliar<%= p.id %>" tabindex="-1">
-        <div class="modal-dialog">
-          <div class="modal-content">
-
-            <form action="/avaliacoes/avaliar" method="POST">
-
-              <div class="modal-header">
-                <h5>Avaliar Pedido</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-              </div>
-
-              <div class="modal-body">
-
-                <input type="hidden" name="pedido_id" value="<%= p.id %>">
-                <input type="hidden" name="vendedor_id" value="<%= p.vendedor_id %>">
-                <input type="hidden" name="nota" id="nota<%= p.id %>">
-
-                <label>Nota</label>
-
-                <div class="stars" data-id="<%= p.id %>">
-                  <span data-value="1">★</span>
-                  <span data-value="2">★</span>
-                  <span data-value="3">★</span>
-                  <span data-value="4">★</span>
-                  <span data-value="5">★</span>
-                </div>
-
-                <textarea name="comentario" class="form-control mt-3" placeholder="Comentário"></textarea>
-
-              </div>
-
-              <div class="modal-footer">
-                <button class="btn btn-success">Enviar</button>
-              </div>
-
-            </form>
-
-          </div>
-        </div>
-      </div>
 
     <% } %>
 
@@ -229,35 +240,78 @@ body{
 
 </div>
 
+<!-- MODAL -->
+<div class="modal" id="modalAvaliacao" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <form action="/avaliacoes/avaliar" method="POST">
+
+        <div class="modal-header">
+          <h5>Avaliar Pedido</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body text-center">
+
+          <input type="hidden" name="pedido_id" id="pedido_id">
+          <input type="hidden" name="vendedor_id" id="vendedor_id">
+          <input type="hidden" name="nota" id="nota">
+
+          <div class="stars" id="stars">
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+            <span>★</span>
+          </div>
+
+          <textarea name="comentario" class="form-control mt-3" placeholder="Comentário"></textarea>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Enviar</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- ⭐ SCRIPT ESTRELAS -->
 <script>
-document.querySelectorAll(".stars").forEach(container => {
-  const stars = container.querySelectorAll("span");
-  const id = container.dataset.id;
-  const input = document.getElementById("nota" + id);
+const modal = new bootstrap.Modal(document.getElementById('modalAvaliacao'));
 
-  stars.forEach(star => {
-    star.addEventListener("click", () => {
-      const value = star.dataset.value;
-      input.value = value;
+document.querySelectorAll('.abrir-avaliacao').forEach(btn => {
+  btn.addEventListener('click', () => {
 
-      stars.forEach(s => s.classList.remove("active"));
+    document.getElementById('pedido_id').value = btn.dataset.id;
+    document.getElementById('vendedor_id').value = btn.dataset.vendedor;
 
-      for(let i = 0; i < value; i++){
-        stars[i].classList.add("active");
-      }
-    });
+    document.querySelectorAll("#stars span").forEach(s => s.classList.remove("active"));
+    document.getElementById("nota").value = "";
+
+    modal.show();
   });
 });
-</script>
 
-<!-- ⚠️ ALERTA -->
-<script>
-function alertaAvaliado(){
-  alert("Você já avaliou este pedido!");
-}
+const stars = document.querySelectorAll("#stars span");
+const inputNota = document.getElementById("nota");
+
+stars.forEach((star, index) => {
+  star.addEventListener("click", () => {
+    inputNota.value = index + 1;
+
+    stars.forEach(s => s.classList.remove("active"));
+
+    for(let i = 0; i <= index; i++){
+      stars[i].classList.add("active");
+    }
+  });
+});
 </script>
 
 </body>
