@@ -38,7 +38,7 @@
 - Criar rotas:
   - `POST /register` (cadastro)
   - `POST /login` (login)
-- Criptografar senha (bcrypt)
+- Criptografar senha (bcrypt) - (URGENTE)
 - Criar sessão (express-session)
 
 ### 👤 Usuários
@@ -74,23 +74,23 @@
 - Consumir API com `fetch`
 - Exibir produtos dinamicamente
 - Botão "Adicionar ao carrinho"
-- Feedback visual (alertas)
+- Feedback visual (alertas) - (URGENTE)
 
 ---
 
 ## 5. DIFERENCIAIS (Sistema avançado) - CUMPRIDO PARCIALMENTE
-- Filtro de produtos (preço, nome)
-- Upload de imagem do lanche
+- Filtro de produtos (vendedor)
+- Upload de imagem do lanche - (URGENTE)
 - Sistema de avaliações ⭐
 - Dashboard do vendedor
-- Controle de estoque
-- Notificações (pedido realizado)
-- Responsividade (mobile)
+- Controle de estoque - (URGENTE)
+- Notificações (pedido realizado) - (URGENTE)
+- Responsividade (mobile) - (PODE ESPERAR)
 
 ---
 
 ## 6. SEGURANÇA - CUMPRIDO PARCIALMENTE
-- Hash de senha (bcrypt)
+- Hash de senha (bcrypt) - (URGENTE)
 - Proteção de rotas (middleware)
 - Validação de dados (backend)
 - Prevenção contra SQL Injection
@@ -126,9 +126,13 @@
 ---
 
 ## FLUXO FINAL DO SISTEMA
-1. Usuário se cadastra  
-2. Faz login  
-3. Navega pelos lanches  
-4. Adiciona ao carrinho  
-5. Finaliza pedido  
-6. Vendedor recebe pedido  
+1. Usuário se cadastra - OK!
+2. Faz login - OK!
+3. Navega pelos lanches - OK! 
+4. Adiciona ao carrinho - OK!
+5. Finaliza pedido - OK!
+6. Vendedor recebe pedido - OK!
+7. Vendedor registra pedido entregue - OK!
+8. Venda é registrada no sistema - OK!
+9. Avaliação é habilitada - OK!
+10. Cliente avalia - OK!
