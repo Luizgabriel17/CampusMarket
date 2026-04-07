@@ -13,6 +13,7 @@ const clienteRoutes = require("./routes/cliente");
 const dashboardRoutes = require("./routes/dashboard");
 const pedidosRoutes = require("./routes/pedidos");
 const carrinhoRoutes = require("./routes/carrinho");
+const avaliacoesRoutes = require("./routes/avaliacoes");
 
 // CONFIG
 app.set("view engine", "ejs");
@@ -37,10 +38,11 @@ app.use(session({
   }
 }));
 
-// DISPONIBILIZA USER GLOBALMENTE NAS VIEWS
+// 🔥 USER + URL GLOBAL (IMPORTANTE)
 app.use((req, res, next) => {
   res.locals.user = req.session.user || null;
   res.locals.session = req.session;
+  res.locals.url = req.originalUrl; // 👈 ESSA LINHA É A CHAVE
   next();
 });
 
@@ -51,17 +53,20 @@ app.use("/cliente", clienteRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/pedidos", pedidosRoutes);
 app.use("/carrinho", carrinhoRoutes);
-app.use("/avaliacoes", require("./routes/avaliacoes"));
+app.use("/avaliacoes", avaliacoesRoutes);
+
+// PÁGINAS
 app.get('/', (req, res) => {
   res.render('landing');
 });
+
 app.get('/redirect', (req, res) => {
   res.render('redirect');
 });
+
 app.get('/redirect-cliente', (req, res) => {
   res.render('redirect-cliente');
 });
-
 
 // START
 app.listen(3000, () => {

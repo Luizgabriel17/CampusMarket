@@ -4,14 +4,16 @@
 
   <div class="menu">
 
-    <% if (user.tipo === "cliente") { %>
-      <a href="/cliente">🏠 Início</a>
+    <% if (user && user.tipo === "cliente") { %>
+      <a href="/cliente" class="<%= url === '/cliente' ? 'active' : '' %>">🏠 Início</a>
       <a href="#" data-bs-toggle="offcanvas" data-bs-target="#carrinho">🛒 Carrinho</a>
-      <a href="/pedidos" class="active">📦 Pedidos</a>
+      <a href="/pedidos" class="<%= url === '/pedidos' ? 'active' : '' %>">📦 Pedidos</a>
     <% } %>
 
-    <% if (user.tipo === "vendedor") { %>
-      <a href="/dashboard">📊 Dashboard</a>
+    <% if (user && user.tipo === "vendedor") { %>
+      <a href="/dashboard" class="<%= url === '/dashboard' ? 'active' : '' %>">📊 Dashboard</a>
+      <a href="/dashboard/produtos" class="<%= url.includes('/dashboard/produtos') ? 'active' : '' %>">🍔 Produtos</a>
+      <a href="/dashboard/pedidos" class="<%= url.includes('/dashboard/pedidos') ? 'active' : '' %>">📦 Pedidos</a>
     <% } %>
 
   </div>
@@ -22,3 +24,48 @@
   </div>
 
 </div>
+
+<style>
+.sidebar{
+  width:230px;
+  height:100vh;
+  background:#ffffff;
+  padding:25px 20px;
+  position:fixed;
+  border-right:1px solid #e2e8f0;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.logo{
+  font-weight:800;
+  font-size:1.3rem;
+  color:#ff5a1f;
+  margin-bottom:30px;
+}
+
+.menu a{
+  display:block;
+  padding:10px;
+  border-radius:10px;
+  color:#334155;
+  text-decoration:none;
+  margin-bottom:8px;
+  transition:.2s;
+}
+
+.menu a:hover{
+  background:#f1f5f9;
+}
+
+.menu .active{
+  background:#ff5a1f;
+  color:white;
+}
+
+.user{
+  font-size:0.9rem;
+  color:#475569;
+}
+</style>

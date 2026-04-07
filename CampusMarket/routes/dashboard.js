@@ -15,6 +15,7 @@ function authVendedor(req, res, next) {
 ========================= */
 router.get("/", authVendedor, (req, res) => {
   const vendedorId = req.session.user.id;
+  const hoje = new Date().toISOString().slice(0, 10);
 
   // PRODUTOS
   db.query(
@@ -23,7 +24,7 @@ router.get("/", authVendedor, (req, res) => {
     (err, produtos) => {
       if (err) return res.send(err);
 
-      // PEDIDOS
+      // PEDIDOS (AGORA COM CLIENTE CORRETO)
       db.query(
         `
         SELECT 
@@ -31,10 +32,13 @@ router.get("/", authVendedor, (req, res) => {
           p.valor_total,
           p.status,
           p.data_pedido,
+          c.nome AS cliente_nome,
+          COUNT(i.id) as quantidade,
           GROUP_CONCAT(pr.nome SEPARATOR ', ') AS itens
         FROM pedidos p
         JOIN itens_pedido i ON i.pedido_id = p.id
         JOIN produtos pr ON pr.id = i.produto_id
+        JOIN cliente c ON c.id = p.cliente_id
         WHERE pr.vendedor_id = ?
         GROUP BY p.id
         ORDER BY p.id DESC
@@ -43,22 +47,68 @@ router.get("/", authVendedor, (req, res) => {
         (err2, pedidos) => {
           if (err2) return res.send(err2);
 
-          // MÉTRICAS
-          const totalPedidos = pedidos.length;
+          // MÉTRICAS DO DIA
+          db.query(
+            `
+            SELECT 
+              COUNT(*) as pedidosHoje,
+              SUM(valor_total) as faturamentoHoje
+            FROM pedidos
+            WHERE DATE(data_pedido) = ?
+            `,
+            [hoje],
+            (err3, hojeData) => {
+              if (err3) return res.send(err3);
 
-          const faturamento = pedidos.reduce(
-            (soma, p) => soma + parseFloat(p.valor_total),
-            0
+              const pedidosHoje = hojeData[0].pedidosHoje || 0;
+              const faturamentoHoje = hojeData[0].faturamentoHoje || 0;
+
+              // FATURAMENTO DA SEMANA
+              db.query(
+                `
+                SELECT 
+                  DATE(data_pedido) as dia,
+                  SUM(valor_total) as total
+                FROM pedidos
+                GROUP BY DATE(data_pedido)
+                ORDER BY dia DESC
+                LIMIT 7
+                `,
+                (err4, faturamentoSemana) => {
+                  if (err4) return res.send(err4);
+
+                  // PRODUTOS MAIS VENDIDOS
+                  db.query(
+                    `
+                    SELECT pr.nome, COUNT(i.produto_id) as total
+                    FROM itens_pedido i
+                    JOIN produtos pr ON pr.id = i.produto_id
+                    WHERE pr.vendedor_id = ?
+                    GROUP BY pr.id
+                    ORDER BY total DESC
+                    LIMIT 5
+                    `,
+                    [vendedorId],
+                    (err5, maisVendidos) => {
+                      if (err5) return res.send(err5);
+
+                      // RENDER FINAL
+                      res.render("dashboard", {
+                        user: req.session.user,
+                        produtos: produtos || [],
+                        pedidos: pedidos || [],
+                        pedidosHoje,
+                        faturamentoHoje,
+                        vendasHoje: faturamentoHoje,
+                        faturamentoSemana: faturamentoSemana || [],
+                        maisVendidos: maisVendidos || []
+                      });
+                    }
+                  );
+                }
+              );
+            }
           );
-
-          res.render("dashboard", {
-            user: req.session.user,
-            produtos: produtos || [],
-            pedidos: pedidos || [],
-            totalPedidos,
-            totalVendas: faturamento,
-            faturamento
-          });
         }
       );
     }
@@ -66,7 +116,7 @@ router.get("/", authVendedor, (req, res) => {
 });
 
 /* =========================
-   NOVO PRODUTO (FORM)
+   NOVO PRODUTO
 ========================= */
 router.get("/produtos/novo", authVendedor, (req, res) => {
   res.render("novo-produto");
@@ -91,7 +141,7 @@ router.post("/produtos", authVendedor, (req, res) => {
 });
 
 /* =========================
-   EDITAR PRODUTO (FORM)
+   EDITAR PRODUTO
 ========================= */
 router.get("/produtos/editar/:id", authVendedor, (req, res) => {
   db.query(
@@ -137,7 +187,7 @@ router.post("/produtos/deletar/:id", authVendedor, (req, res) => {
 });
 
 /* =========================
-   ATUALIZAR STATUS PEDIDO RECEBIDO
+   ATUALIZAR STATUS PEDIDO
 ========================= */
 router.post("/pedidos/status/:id", authVendedor, (req, res) => {
   const { status } = req.body;
@@ -148,6 +198,59 @@ router.post("/pedidos/status/:id", authVendedor, (req, res) => {
     (err) => {
       if (err) return res.send(err);
       res.redirect("/dashboard");
+    }
+  );
+});
+
+/* =========================
+   LISTAR PRODUTOS
+========================= */
+router.get("/produtos", authVendedor, (req, res) => {
+  const vendedorId = req.session.user.id;
+
+  db.query(
+    "SELECT * FROM produtos WHERE vendedor_id = ?",
+    [vendedorId],
+    (err, produtos) => {
+      if (err) return res.send(err);
+
+      res.render("dashboard-produtos", {
+        produtos: produtos || [],
+        user: req.session.user
+      });
+    }
+  );
+});
+
+/* =========================
+   LISTAR PEDIDOS
+========================= */
+router.get("/pedidos", authVendedor, (req, res) => {
+  const vendedorId = req.session.user.id;
+
+  db.query(
+    `
+    SELECT 
+      p.id,
+      p.valor_total,
+      p.status,
+      p.data_pedido,
+      GROUP_CONCAT(pr.nome SEPARATOR ', ') AS itens
+    FROM pedidos p
+    JOIN itens_pedido i ON i.pedido_id = p.id
+    JOIN produtos pr ON pr.id = i.produto_id
+    WHERE pr.vendedor_id = ?
+    GROUP BY p.id
+    ORDER BY p.id DESC
+    `,
+    [vendedorId],
+    (err, pedidos) => {
+      if (err) return res.send(err);
+
+      res.render("dashboard-pedidos", {
+        pedidos: pedidos || [],
+        user: req.session.user
+      });
     }
   );
 });
